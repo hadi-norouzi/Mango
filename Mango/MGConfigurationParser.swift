@@ -16,19 +16,19 @@ extension MGConfiguration {
         init(urlString: String) throws {
             guard let components = Foundation.URLComponents(string: urlString),
                   let protocolType = components.scheme.flatMap(MGConfiguration.Outbound.ProtocolType.init(rawValue:)) else {
-                throw NSError.newError("协议链接解析失败")
+                throw NSError.newError("Protocol link parsing failed")
             }
             guard protocolType == .vless || protocolType == .vmess else {
-                throw NSError.newError("暂不支持\(protocolType.description)协议解析")
+                throw NSError.newError("protocol analysis\(protocolType.description)Not supported yet")
             }
             guard let user = components.user, !user.isEmpty else {
-                throw NSError.newError("用户不存在")
+                throw NSError.newError("User does not exist")
             }
             guard let host = components.host, !host.isEmpty else {
-                throw NSError.newError("服务器域名或地址不存在")
+                throw NSError.newError("The server domain name or address does not exist")
             }
             guard let port = components.port, (1...65535).contains(port) else {
-                throw NSError.newError("服务器的端口号不合法")
+                throw NSError.newError("The port number of the server is invalid")
             }
             let mapping = (components.queryItems ?? []).reduce(into: [String: String](), { result, item in
                 result[item.name] = item.value
@@ -38,20 +38,20 @@ extension MGConfiguration {
                 if let value = MGConfiguration.Outbound.StreamSettings.Transport(rawValue: value) {
                     transport = value
                 } else {
-                    throw NSError.newError("未知的传输方式")
+                    throw NSError.newError("unknown transport")
                 }
             } else {
-                throw NSError.newError("传输方式不能为空")
+                throw NSError.newError("Transport method cannot be empty")
             }
             let security: MGConfiguration.Outbound.StreamSettings.Security
             if let value = mapping["security"] {
                 if value.isEmpty {
-                    throw NSError.newError("传输安全不能为空")
+                    throw NSError.newError("Transport Security cannot be empty")
                 } else {
                     if let value = MGConfiguration.Outbound.StreamSettings.Security(rawValue: value) {
                         security = value
                     } else {
-                        throw NSError.newError("未知的传输安全方式")
+                        throw NSError.newError("unknown transport security method")
                     }
                 }
             } else {
@@ -86,12 +86,12 @@ extension MGConfiguration.Outbound.VLESSSettings: MGConfigurationParserProtocol 
         vless.user.id = components.user
         if let value = components.queryMapping["encryption"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) 加密算法存在但为空")
+                throw NSError.newError("\(components.protocolType.description) \(String(localized: "encriptionEmpty"))")
             } else {
                 if value == "none" {
                     vless.user.encryption = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) 不支持的加密算法: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) \(String(localized: "unsupportedEncriptionAlgorithm")): \(value)")
                 }
             }
         } else {
@@ -99,7 +99,7 @@ extension MGConfiguration.Outbound.VLESSSettings: MGConfigurationParserProtocol 
         }
         if let value = components.queryMapping["flow"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) 流控不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(String(localized: "flowControllEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.VLESSSettings.Flow(rawValue: value) {
                     vless.user.flow = value
@@ -165,12 +165,12 @@ extension MGConfiguration.Outbound.StreamSettings.KCPSettings: MGConfigurationPa
         var kcp = MGConfiguration.Outbound.StreamSettings.KCPSettings()
         if let value = components.queryMapping["headerType"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType \(String(localized: "canNotBeEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.StreamSettings.HeaderType(rawValue: value) {
                     kcp.header.type = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType 不支持的类型: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType \(String(localized: "unsupportedType")): \(value)")
                 }
             }
         } else {
@@ -178,7 +178,7 @@ extension MGConfiguration.Outbound.StreamSettings.KCPSettings: MGConfigurationPa
         }
         if let value = components.queryMapping["seed"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) seed 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) seed \(String(localized: "canNotBeEmpty"))")
             } else {
                 kcp.seed = value
             }
@@ -195,7 +195,7 @@ extension MGConfiguration.Outbound.StreamSettings.WSSettings: MGConfigurationPar
         var ws = MGConfiguration.Outbound.StreamSettings.WSSettings()
         if let value = components.queryMapping["host"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host \(String(localized: "canNotBeEmpty"))")
             } else {
                 ws.headers["Host"] = value
             }
@@ -204,7 +204,7 @@ extension MGConfiguration.Outbound.StreamSettings.WSSettings: MGConfigurationPar
         }
         if let value = components.queryMapping["path"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) path 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) path \(String(localized: "canNotBeEmpty"))")
             } else {
                 ws.path = value
             }
@@ -221,7 +221,7 @@ extension MGConfiguration.Outbound.StreamSettings.HTTPSettings: MGConfigurationP
         var http = MGConfiguration.Outbound.StreamSettings.HTTPSettings()
         if let value = components.queryMapping["host"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) host \(String(localized: "canNotBeEmpty"))")
             } else {
                 http.host = [value]
             }
@@ -230,7 +230,7 @@ extension MGConfiguration.Outbound.StreamSettings.HTTPSettings: MGConfigurationP
         }
         if let value = components.queryMapping["path"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) path 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) path \(String(localized: "canNotBeEmpty"))")
             } else {
                 http.path = value
             }
@@ -247,12 +247,12 @@ extension MGConfiguration.Outbound.StreamSettings.QUICSettings: MGConfigurationP
         var quic = MGConfiguration.Outbound.StreamSettings.QUICSettings()
         if let value = components.queryMapping["quicSecurity"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity \(String(localized: "canNotBeEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.Encryption.init(rawValue: value) {
                     quic.security = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity 不支持的类型: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity \(String(localized: "unsupportedType")): \(value)")
                 }
             }
         } else {
@@ -260,10 +260,10 @@ extension MGConfiguration.Outbound.StreamSettings.QUICSettings: MGConfigurationP
         }
         if let value = components.queryMapping["key"] {
             if quic.security == .none {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity 为 none, key 不能出现")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) quicSecurity for none, key cannot appear")
             }
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) key 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) key \(String(localized: "canNotBeEmpty"))")
             } else {
                 quic.key = value
             }
@@ -272,12 +272,12 @@ extension MGConfiguration.Outbound.StreamSettings.QUICSettings: MGConfigurationP
         }
         if let value = components.queryMapping["headerType"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType \(String(localized: "canNotBeEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.StreamSettings.HeaderType(rawValue: value) {
                     quic.header.type = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType 不支持的类型: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) headerType \(String(localized: "unsupportedType")): \(value)")
                 }
             }
         } else {
@@ -293,7 +293,7 @@ extension MGConfiguration.Outbound.StreamSettings.GRPCSettings: MGConfigurationP
         var grpc = MGConfiguration.Outbound.StreamSettings.GRPCSettings()
         if let value = components.queryMapping["serviceName"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) serviceName 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) serviceName \(String(localized: "canNotBeEmpty"))")
             } else {
                 grpc.serviceName = value
             }
@@ -302,7 +302,7 @@ extension MGConfiguration.Outbound.StreamSettings.GRPCSettings: MGConfigurationP
         }
         if let value = components.queryMapping["mode"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) mode 不能为空")
+                throw NSError.newError("\(components.protocolType.description) \(components.transport.rawValue) mode \(String(localized: "canNotBeEmpty"))")
             } else {
                 grpc.multiMode = value == "multi"
             }
@@ -319,7 +319,7 @@ extension MGConfiguration.Outbound.StreamSettings.TLSSettings: MGConfigurationPa
         var tls = MGConfiguration.Outbound.StreamSettings.TLSSettings()
         if let value = components.queryMapping["sni"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) TLS sni 不能为空")
+                throw NSError.newError("\(components.protocolType.description) TLS sni \(String(localized: "canNotBeEmpty"))")
             } else {
                 tls.serverName = value
             }
@@ -328,12 +328,12 @@ extension MGConfiguration.Outbound.StreamSettings.TLSSettings: MGConfigurationPa
         }
         if let value = components.queryMapping["fp"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) TLS fp 不能为空")
+                throw NSError.newError("\(components.protocolType.description) TLS fp \(String(localized: "canNotBeEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.StreamSettings.Fingerprint(rawValue: value) {
                     tls.fingerprint = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) TLS 不支持的指纹: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) TLS \(String(localized: "fingerprintNotSupported")): \(value)")
                 }
             }
         } else {
@@ -341,7 +341,7 @@ extension MGConfiguration.Outbound.StreamSettings.TLSSettings: MGConfigurationPa
         }
         if let value = components.queryMapping["alpn"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) TLS alpn 不能为空")
+                throw NSError.newError("\(components.protocolType.description) TLS alpn \(String(localized: "fingerprintNotSupported"))")
             } else {
                 tls.alpn = Set(value.components(separatedBy: ",").compactMap(MGConfiguration.Outbound.StreamSettings.ALPN.init(rawValue:)))
             }
@@ -359,13 +359,13 @@ extension MGConfiguration.Outbound.StreamSettings.RealitySettings: MGConfigurati
         if let value = components.queryMapping["pbk"], !value.isEmpty {
             reality.publicKey = value
         } else {
-            throw NSError.newError("\(components.protocolType.description) Reality pbk 不合法")
+            throw NSError.newError("\(components.protocolType.description) Reality pbk \(String(localized: "illegal"))")
         }
         reality.shortId = components.queryMapping["sid"] ?? ""
         reality.spiderX = components.queryMapping["spx"] ?? ""
         if let value = components.queryMapping["sni"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) Reality sni 不能为空")
+                throw NSError.newError("\(components.protocolType.description) Reality sni \(String(localized: "canNotBeEmpty"))")
             } else {
                 reality.serverName = value
             }
@@ -374,12 +374,12 @@ extension MGConfiguration.Outbound.StreamSettings.RealitySettings: MGConfigurati
         }
         if let value = components.queryMapping["fp"] {
             if value.isEmpty {
-                throw NSError.newError("\(components.protocolType.description) Reality fp 不能为空")
+                throw NSError.newError("\(components.protocolType.description) Reality fp \(String(localized: "canNotBeEmpty"))")
             } else {
                 if let value = MGConfiguration.Outbound.StreamSettings.Fingerprint(rawValue: value) {
                     reality.fingerprint = value
                 } else {
-                    throw NSError.newError("\(components.protocolType.description) Reality 不支持的指纹: \(value)")
+                    throw NSError.newError("\(components.protocolType.description) Reality \(String(localized: "fingerprintNotSupported")): \(value)")
                 }
             }
         } else {

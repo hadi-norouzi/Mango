@@ -13,9 +13,9 @@ extension MGConfiguration {
             return pt.description
         } else {
             if self.attributes.source.isFileURL {
-                return "本地"
+                return String(localized: "local")
             } else {
-                return "远程"
+                return String(localized: "remote")
             }
         }
     }
@@ -119,11 +119,11 @@ struct MGConfigurationListView: View {
             let message: String
             switch failure {
             case .badInput:
-                message = "输入错误"
+                message = String(localized: "inputError")
             case .badOutput:
-                message = "输出错误"
+                message = String(localized: "outputError")
             case .permissionDenied:
-                message = "权限错误"
+                message = String(localized: "permissionError")
             case .initError(let error):
                 message = error.localizedDescription
             }
@@ -178,7 +178,7 @@ struct MGConfigurationListView: View {
             VStack(spacing: 20) {
                 Image(systemName: "doc.text.magnifyingglass")
                     .font(.largeTitle)
-                Text("暂无配置")
+                Text("NoConfigurationYet")
             }
             .foregroundColor(.secondary)
             .padding()
@@ -193,18 +193,18 @@ struct MGConfigurationListView: View {
                 do {
                     self.editModel = try MGConfigurationEditModel(configuration: configuration)
                 } catch {
-                    MGNotification.send(title: "", subtitle: "", body: "加载文件失败, 原因: \(error.localizedDescription)")
+                    MGNotification.send(title: "", subtitle: "", body: "\(String(localized: "failedToLoadFile")) \(error.localizedDescription)")
                 }
             } else {
                 self.configurationName = configuration.attributes.alias
                 self.isRenameAlertPresented.toggle()
             }
         } label: {
-            Label(configuration.isUserCreated ? "编辑" : "重命名", systemImage: "square.and.pencil")
+            Label(configuration.isUserCreated ? String(localized: "edit") : String(localized: "rename"), systemImage: "square.and.pencil")
         }
-        .alert("重命名", isPresented: $isRenameAlertPresented) {
-            TextField("请输入配置名称", text: $configurationName)
-            Button("确定") {
+        .alert(String(localized: "rename"), isPresented: $isRenameAlertPresented) {
+            TextField(String(localized: "enterConfigName"), text: $configurationName)
+            Button(String(localized: "sure")) {
                 let name = configurationName.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !(name == configuration.attributes.alias || name.isEmpty) else {
                     return
@@ -212,10 +212,10 @@ struct MGConfigurationListView: View {
                 do {
                     try configurationListManager.rename(configuration: configuration, name: name)
                 } catch {
-                    MGNotification.send(title: "", subtitle: "", body: "重命名失败, 原因: \(error.localizedDescription)")
+                    MGNotification.send(title: "", subtitle: "", body: "\(String(localized: "renameFailedReason")) \(error.localizedDescription)")
                 }
             }
-            Button("取消", role: .cancel) {}
+            Button(String(localized: "cancel"), role: .cancel) {}
         }
     }
     
@@ -225,7 +225,7 @@ struct MGConfigurationListView: View {
             Task(priority: .userInitiated) {
                 do {
                     try await configurationListManager.update(configuration: configuration)
-                    MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"更新成功")
+                    MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"\(String(localized: "updateCompleted"))")
                     if configuration.id == current.wrappedValue {
                         guard let status = packetTunnelManager.status, status == .connected else {
                             return
@@ -238,11 +238,11 @@ struct MGConfigurationListView: View {
                         }
                     }
                 } catch {
-                    MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"更新失败, 原因: \(error.localizedDescription)")
+                    MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"\(String(localized: "updateFailedReason")) \(error.localizedDescription)")
                 }
             }
         } label: {
-            Label("更新", systemImage: "arrow.triangle.2.circlepath")
+            Label(String(localized: "renew"), systemImage: "arrow.triangle.2.circlepath")
         }
         .disabled(configurationListManager.downloadingConfigurationIDs.contains(configuration.id) || configuration.isLocal)
     }
@@ -252,16 +252,16 @@ struct MGConfigurationListView: View {
         Button(role: .destructive) {
             do {
                 try configurationListManager.delete(configuration: configuration)
-                MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"删除成功")
+                MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"\(String(localized: "successfullyDeleted"))")
                 if configuration.id == current.wrappedValue {
                     current.wrappedValue = ""
                     packetTunnelManager.stop()
                 }
             } catch {
-                MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"删除失败, 原因: \(error.localizedDescription)")
+                MGNotification.send(title: "", subtitle: "", body: "\"\(configuration.attributes.alias)\"\(String(localized: "deleteFailedReason")) \(error.localizedDescription)")
             }
         } label: {
-            Label("删除", systemImage: "trash")
+            Label(String(localized: "delete"), systemImage: "trash")
         }
         .disabled(configurationListManager.downloadingConfigurationIDs.contains(configuration.id))
     }

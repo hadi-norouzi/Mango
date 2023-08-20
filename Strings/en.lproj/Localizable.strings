@@ -1,0 +1,47 @@
+/* 
+  Localizable.strings
+  Mango
+
+  Created by Hadi norouzi on 8/20/23.
+  
+*/
+appName = "Mango";
+name = "Name";
+type = "Type";
+recentlyUpdated = "recently updated";
+noCurrentConfiguration = "no current configuration";
+none = "none";
+notSelected = "not selected";
+local = "local";
+remote = "remote";
+inputError = "input error";
+outputError = "output error";
+permissionError = "permission error";
+noConfigurationYet = "No configuration yet";
+networkSettings = "network settings";
+hideVpnIcon = "hide VPN icon";
+excludeRoute = "exclude route";
+ipv6Issue = "Enabling IPv6 in an environment that does not support IPv6 may have compatibility issues, so be careful to enable it";
+enableIPv6Routing = "Enable IPv6 routing";
+canNotAccessConfigurationFile = "Can't access the configuration file";
+configurationAddressInvalid = "The configuration address is invalid";
+failedToLoadFile = "Failed to load file, reason:";
+edit = "edit";
+rename = "Rename";
+enterConfigName = "Please enter a configuration name";
+renameFailedReason = "Rename failed, reason:";
+cancel = "Cancel";
+updateCompleted = "update completed";
+renew = "renew";
+successfullyDeleted = "successfully deleted";
+delete = "delete";
+updateFailedReason = "Update failed, reason:";
+deleteFailedReason = "Delete failed, reason:";
+sure = "Sure";
+encriptionEmpty = "The encryption algorithm exists but is empty";
+unsupportedEncriptionAlgorithm = "Unsupported encryption algorithms:";
+flowControllEmpty= "flow control cannot be empty";
+canNotBeEmpty = "Can not be empty";
+unsupportedType = "unsupported type";
+fingerprintNotSupported = "Fingerprint not supported";
+illegal = "illegal";

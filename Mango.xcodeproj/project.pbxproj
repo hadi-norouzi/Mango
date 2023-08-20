@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FFBC1492A91FD2D009264F5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1FFBC14B2A91FD2D009264F5 /* Localizable.strings */; };
 		7000C6E4295D635F0005626E /* MGControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7000C6E3295D635F0005626E /* MGControlView.swift */; };
 		702A08A629D182CF00B0BBF8 /* MGDNSSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */; };
 		702A08AC29D1A1E600B0BBF8 /* MGStringListEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */; };
@@ -132,6 +133,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1FFBC14A2A91FD2D009264F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1FFBC14C2A922CF7009264F5 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7000C6E3295D635F0005626E /* MGControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGControlView.swift; sourceTree = "<group>"; };
 		702A08A529D182CF00B0BBF8 /* MGDNSSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGDNSSettingView.swift; sourceTree = "<group>"; };
 		702A08AB29D1A1E600B0BBF8 /* MGStringListEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MGStringListEditor.swift; sourceTree = "<group>"; };
@@ -225,6 +228,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1FFBC1462A91FCAA009264F5 /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				1FFBC14B2A91FD2D009264F5 /* Localizable.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		702D9092299FA40600B83324 /* XrayTunnel */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +325,7 @@
 			children = (
 				702D9088299B54FD00B83324 /* README.txt */,
 				7084FC242963FB8A00065DAF /* Config.xcconfig */,
+				1FFBC1462A91FCAA009264F5 /* Strings */,
 				70C9EDCF295145DB00B6995B /* Shared */,
 				70C9ED9729501D5B00B6995B /* Mango */,
 				702D9092299FA40600B83324 /* XrayTunnel */,
@@ -523,6 +535,7 @@
 			knownRegions = (
 				Base,
 				en,
+				"zh-Hans",
 			);
 			mainGroup = 70C9ED8C29501D5B00B6995B;
 			packageReferences = (
@@ -553,6 +566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				70C9EDA029501D5C00B6995B /* Preview Assets.xcassets in Resources */,
+				1FFBC1492A91FD2D009264F5 /* Localizable.strings in Resources */,
 				70C9ED9D29501D5C00B6995B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -653,6 +667,18 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		1FFBC14B2A91FD2D009264F5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FFBC14A2A91FD2D009264F5 /* en */,
+				1FFBC14C2A922CF7009264F5 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		702D909B299FA40600B83324 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -711,6 +737,7 @@
 			baseConfigurationReference = 7084FC242963FB8A00065DAF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -772,6 +799,7 @@
 			baseConfigurationReference = 7084FC242963FB8A00065DAF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -831,6 +859,7 @@
 				CODE_SIGN_ENTITLEMENTS = Mango/Mango.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mango/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mango/Info.plist;
@@ -864,6 +893,7 @@
 				CODE_SIGN_ENTITLEMENTS = Mango/Mango.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Mango/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Mango/Info.plist;

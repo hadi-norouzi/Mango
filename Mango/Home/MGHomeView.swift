@@ -28,7 +28,7 @@ struct MGHomeView: View {
                     }
                 }
             }
-            .navigationTitle(Text("Mango"))
+            .navigationTitle(Text("appName"))
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 configurationListManager.reload()

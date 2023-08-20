@@ -19,7 +19,7 @@ import UniformTypeIdentifiers
 
     public static let homeDirectory: URL = {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: MGConstant.suiteName) else {
-            fatalError("无法加载共享文件路径")
+            fatalError("Unable to load shared file path")
         }
         let url = containerURL.appendingPathComponent("Library/Application Support/Xray")
         return MGConstant.createDirectory(at: url)
